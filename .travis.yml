@@ -73,6 +73,7 @@ matrix:
         - cargo test --verbose
       before_cache: *rust_before_cache
 
+
     - language: rust
       rust: nightly
       os: windows
