@@ -24,6 +24,7 @@ matrix:
         - yarn workspace $WORKSPACE lint
         - yarn workspace $WORKSPACE test
 
+
     # GUI - desktop
     - language: node_js
       node_js: '8'
