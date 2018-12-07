@@ -43,7 +43,6 @@ matrix:
     - language: rust
       rust: stable
       os: osx
-      cache: cargo
       before_script: &rust_before_script
         - source env.sh
         - env
@@ -51,8 +50,6 @@ matrix:
       script: &rust_script
         - cargo build --verbose
         - cargo test --verbose
-      before_cache: &rust_before_cache
-        - rm -rf target/debug/incremental/
 
     # Daemon - Windows
     - language: rust
@@ -64,15 +61,12 @@ matrix:
         - ./build_windows_modules.sh --dev-build
         - cargo build --verbose
         - cargo test --verbose
-      before_cache: *rust_before_cache
-
 
     - language: rust
       rust: nightly
       os: windows
       before_script: *rust_before_script
       script: *rust_windows_script
-      before_cache: *rust_before_cache
 
     # Daemon - Linux
     - language: rust
@@ -86,7 +80,6 @@ matrix:
          packages:
           - binutils
           - libdbus-1-dev
-      cache: cargo
       before_script: *rust_before_script
       script:
         # Install and run rustfmt on nightly only until rustfmt.toml settings are stabilized.
@@ -96,25 +89,20 @@ matrix:
         # Run normal builds and tests
         - cargo build --verbose
         - cargo test --verbose
-      before_cache: *rust_before_cache
 
     - language: rust
       rust: beta
       os: linux
       addons: *rust_linux_addons
-      cache: cargo
       before_script: *rust_before_script
       script: *rust_script
-      before_cache: *rust_before_cache
 
     - language: rust
       rust: stable
       os: linux
       addons: *rust_linux_addons
-      cache: cargo
       before_script: *rust_before_script
       script: *rust_script
-      before_cache: *rust_before_cache
 
 
 notifications:
