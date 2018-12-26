@@ -166,22 +166,6 @@ export default class SelectLocation extends Component<Props, State> {
     });
   };
 
-  _relayStatusIndicator(active: boolean, isSelected: boolean) {
-    const statusClass = active ? styles.relay_status__active : styles.relay_status__inactive;
-
-    return isSelected ? (
-      <Cell.Icon
-        style={styles.tick_icon}
-        tintColor={colors.white}
-        source="icon-tick"
-        height={24}
-        width={24}
-      />
-    ) : (
-      <View style={[styles.relay_status, statusClass]} />
-    );
-  }
-
   _renderCountry(relayCountry: RelayLocationRedux) {
     const isSelected = this._isSelected({ country: relayCountry.code });
 
@@ -215,8 +199,7 @@ export default class SelectLocation extends Component<Props, State> {
           disabled={!relayCountry.hasActiveRelays}
           testName="country"
           ref={cellRef}>
-          {this._relayStatusIndicator(relayCountry.hasActiveRelays, isSelected)}
-
+          <RelayStatusIndicator isActive={relayCountry.hasActiveRelays} isSelected={isSelected} />
           <Cell.Label>{relayCountry.name}</Cell.Label>
 
           {hasChildren ? (
@@ -273,7 +256,7 @@ export default class SelectLocation extends Component<Props, State> {
           style={isSelected ? styles.sub_cell__selected : styles.sub_cell}
           testName="city"
           ref={cellRef}>
-          {this._relayStatusIndicator(relayCity.hasActiveRelays, isSelected)}
+          <RelayStatusIndicator isActive={relayCity.hasActiveRelays} isSelected={isSelected} />
 
           <Cell.Label>{relayCity.name}</Cell.Label>
 
@@ -320,10 +303,36 @@ export default class SelectLocation extends Component<Props, State> {
         style={isSelected ? styles.sub_sub_cell__selected : styles.sub_sub_cell}
         testName="relay"
         ref={cellRef}>
-        {this._relayStatusIndicator(true, isSelected)}
+        <RelayStatusIndicator isActive={true} isSelected={isSelected} />
 
         <Cell.Label>{relay.hostname}</Cell.Label>
       </Cell.CellButton>
     );
   }
 }
+
+type RelayStatusIndicatorProps = {
+  isActive: boolean,
+  isSelected: boolean,
+};
+
+class RelayStatusIndicator extends Component<RelayStatusIndicatorProps> {
+  render() {
+    const statusClass = this.props.isActive
+      ? styles.relay_status__active
+      : styles.relay_status__inactive;
+
+    return this.props.isSelected ? (
+      <Cell.Icon
+        style={styles.tick_icon}
+        tintColor={colors.white}
+        source="icon-tick"
+        height={24}
+        width={24}
+      />
+    ) : (
+      <View style={[styles.relay_status, statusClass]} />
+    );
+  }
+}
+
